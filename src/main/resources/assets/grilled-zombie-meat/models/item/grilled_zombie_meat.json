@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "grilled-zombie-meat:item/grilled_zombie_meat"
+  }
+}
