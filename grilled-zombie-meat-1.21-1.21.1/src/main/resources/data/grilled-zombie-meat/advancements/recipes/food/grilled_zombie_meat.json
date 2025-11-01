@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_rotten_flesh": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:rotten_flesh"
+            ]
+          }
+        ]
+      }
+    },
+    "has_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "grilled-zombie-meat:grilled_zombie_meat_from_smelting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rotten_flesh",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "grilled-zombie-meat:grilled_zombie_meat_from_smelting",
+      "grilled-zombie-meat:grilled_zombie_meat_from_smoking",
+      "grilled-zombie-meat:grilled_zombie_meat_from_campfire_cooking"
+    ]
+  }
+}
