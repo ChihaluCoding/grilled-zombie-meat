@@ -35,13 +35,13 @@ public final class ModItems {
 		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		Item.Settings settings = new Item.Settings()
-			.component(DataComponentTypes.FOOD, foodComponent)
-			.translationKey(TRANSLATION_PREFIX + name)
-			.registryKey(key);
+			.component(DataComponentTypes.FOOD, foodComponent);
 
 		settings = applyOptionalConsumableComponent(settings, foodComponent);
+		settings = applyOptionalTranslationKey(settings, name);
+		settings = applyOptionalRegistryKey(settings, key);
 
-		return Registry.register(Registries.ITEM, key, new Item(settings));
+		return Registry.register(Registries.ITEM, id, new Item(settings));
 	}
 
 	private static Item.Settings applyOptionalConsumableComponent(Item.Settings settings, FoodComponent foodComponent) {
@@ -69,6 +69,33 @@ public final class ModItems {
 			return settings;
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException exception) {
 			GrilledZombieMeat.LOGGER.warn("Failed to attach consumable component", exception);
+		}
+
+		return settings;
+	}
+
+	private static Item.Settings applyOptionalTranslationKey(Item.Settings settings, String name) {
+		return mutateSettingsIfPresent(settings, "translationKey", String.class, TRANSLATION_PREFIX + name);
+	}
+
+	private static Item.Settings applyOptionalRegistryKey(Item.Settings settings, RegistryKey<Item> key) {
+		if (key == null) {
+			return settings;
+		}
+
+		return mutateSettingsIfPresent(settings, "registryKey", RegistryKey.class, key);
+	}
+
+	private static Item.Settings mutateSettingsIfPresent(Item.Settings settings, String methodName, Class<?> parameterType, Object argument) {
+		try {
+			Method method = Item.Settings.class.getMethod(methodName, parameterType);
+			Object result = method.invoke(settings, argument);
+			if (result instanceof Item.Settings updated) {
+				return updated;
+			}
+		} catch (NoSuchMethodException ignored) {
+		} catch (IllegalAccessException | InvocationTargetException exception) {
+			GrilledZombieMeat.LOGGER.debug("Failed to call Item.Settings#{} reflectively", methodName, exception);
 		}
 
 		return settings;
