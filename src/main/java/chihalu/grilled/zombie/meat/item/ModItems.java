@@ -12,13 +12,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 
 public final class ModItems {
 	private static final float DEFAULT_EAT_SECONDS = 1.6F;
-	private static final String TRANSLATION_PREFIX = "item." + GrilledZombieMeat.MOD_ID + ".";
 
 	public static final FoodComponent GRILLED_ZOMBIE_MEAT_FOOD = new FoodComponent.Builder()
 		.nutrition(6)
@@ -32,16 +29,13 @@ public final class ModItems {
 
 	private static Item registerFoodItem(String name, FoodComponent foodComponent) {
 		Identifier id = Identifier.of(GrilledZombieMeat.MOD_ID, name);
-		RegistryKey<Item> key = RegistryKey.of(RegistryKeys.ITEM, id);
 
 		Item.Settings settings = new Item.Settings()
-			.component(DataComponentTypes.FOOD, foodComponent)
-			.translationKey(TRANSLATION_PREFIX + name)
-			.registryKey(key);
+			.component(DataComponentTypes.FOOD, foodComponent);
 
 		settings = applyOptionalConsumableComponent(settings, foodComponent);
 
-		return Registry.register(Registries.ITEM, key, new Item(settings));
+		return Registry.register(Registries.ITEM, id, new Item(settings));
 	}
 
 	private static Item.Settings applyOptionalConsumableComponent(Item.Settings settings, FoodComponent foodComponent) {
